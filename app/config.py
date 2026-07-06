@@ -1,0 +1,3 @@
+YAML_PATH="topics.yaml"
+COOLDOWN_DAYS = 7
+MAX_ITERATIONS = 3
