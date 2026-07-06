@@ -1,26 +1,29 @@
 from langgraph.graph import START,END,StateGraph
-from graph import state
 from graph.state import poemState
 from graph.nodes import topic_planner_node, research_node, content_generator_node, critic_node, formatted_output_node, publisher_node
 from app.config import MAX_ITERATIONS
+from app.logger import get_logger
+
+logger = get_logger(__name__)
+
 graph=StateGraph(poemState)
 
 def should_rewrite(state: poemState):
     iteration = state["iteration"]
     score = state["critic"]["score"]
-    print(f"\n--- [ROUTE DECISION] Evaluating rewrite condition ---")
-    print(f"  Current Iteration: {iteration} (Max allowed: {MAX_ITERATIONS})")
-    print(f"  Critic Score: {score}/10")
+    logger.info("--- [ROUTE DECISION] Evaluating rewrite condition ---")
+    logger.info(f"  Current Iteration: {iteration} (Max allowed: {MAX_ITERATIONS})")
+    logger.info(f"  Critic Score: {score}/10")
     
     if iteration >= MAX_ITERATIONS:
-        print("  Decision: Max iterations reached. Proceeding to END.")
+        logger.info("  Decision: Max iterations reached. Proceeding to END.")
         return False
         
     if score < 8:
-        print(f"  Decision: Score {score} < 8. Routing back to 'content_generator' to rewrite content.")
+        logger.info(f"  Decision: Score {score} < 8. Routing back to 'content_generator' to rewrite content.")
         return True
     else:
-        print(f"  Decision: Score {score} >= 8. Content is satisfactory. Proceeding to END.")
+        logger.info(f"  Decision: Score {score} >= 8. Content is satisfactory. Proceeding to END.")
         return False
 
 
@@ -42,4 +45,4 @@ graph.add_conditional_edges("critic", should_rewrite,{True:"content_generator", 
 workflow=graph.compile()
 
 result=workflow.invoke({"topic":"Im sitting under a tree and I see a bird flying in the sky", "iteration": 0})
-print(result)
+logger.info(f"Workflow execution result:\n{result}")
