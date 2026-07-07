@@ -1,9 +1,10 @@
 import asyncio
 
+from openai import RateLimitError
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from app.config import TELEGRAM_WELCOME_MESSAGE
+from app.config import TELEGRAM_HELP_MESSAGE, TELEGRAM_WELCOME_MESSAGE
 from app.logger import get_logger
 from graph.workflow import workflow
 from telegram_bot.constants import USER_DATA_FORMATTED_CONTENT, USER_DATA_WORKFLOW_INPUT
@@ -26,7 +27,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text("Help!")
+    await update.message.reply_html(TELEGRAM_HELP_MESSAGE)
 
 
 async def generate_content(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -42,17 +43,41 @@ async def generate_content(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         await message.reply_text("Send a topic after /write to generate a poem.")
         return
 
-    await message.reply_text("Please wait while we generate your content...")
+    status_message = await message.reply_text(
+        "⏳ Please wait while we generate your content..."
+    )
 
     try:
         result = await run_workflow_for_topic(topic, iteration=0)
         formatted_content = result["formatted_content"]
-    except Exception as exc:
-        logger.exception("Content generation failed")
-        await message.reply_text(f"Generation failed: {exc}")
+
+    except RateLimitError:
+        await status_message.delete()
+
+        await message.reply_text(
+            "⚠️ Daily AI generation limit reached.\n\n"
+            "Please try again later."
+        )
         return
 
-    context.user_data[USER_DATA_WORKFLOW_INPUT] = {"topic": topic, "iteration": 0}
+    except Exception as exc:
+        await status_message.delete()
+
+        logger.exception("Content generation failed")
+        await message.reply_text(
+            "❌ Failed to generate content."
+        )
+        return
+
+    context.user_data[USER_DATA_WORKFLOW_INPUT] = {
+        "topic": topic,
+        "iteration": 0,
+    }
     context.user_data[USER_DATA_FORMATTED_CONTENT] = formatted_content
 
-    await message.reply_html(formatted_content, reply_markup=preview_keyboard)
+    await status_message.delete()
+
+    await message.reply_html(
+        formatted_content,
+        reply_markup=preview_keyboard,
+    )
