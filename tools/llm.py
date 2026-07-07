@@ -1,13 +1,8 @@
 from langchain_openai import ChatOpenAI
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-api_key=os.environ.get("GROQ_API_KEY")
-
-def load_llm():
-    model=ChatOpenAI(model="llama-3.3-70b-versatile",
-                     base_url="https://api.groq.com/openai/v1",
-                     api_key=api_key,
-                     temperature=0.5)
+from app.config import API_KEY,BASE_URL
+def load_llm(model_name):
+    model=ChatOpenAI(model=model_name,
+                     base_url=BASE_URL,
+                     api_key=API_KEY,
+                     temperature=0.7)
     return model

@@ -3,8 +3,9 @@ from prompts.writer import WRITER_PROMPT
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from graph.state import WriterResult
+from app.config import WRITER_MODEL
 
-model=load_llm()
+model=load_llm(model_name=WRITER_MODEL)
 parser=JsonOutputParser(pydantic_object=WriterResult)
 prompt=PromptTemplate(template=WRITER_PROMPT,
                       input_variables=["topic", "research", "previous_poem", "critic_feedback"],

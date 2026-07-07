@@ -26,4 +26,5 @@ class poemState(TypedDict):
     iteration: int
     research: ResearchResult
     content: WriterResult
+    formatted_content: str
     critic: CriticResult
