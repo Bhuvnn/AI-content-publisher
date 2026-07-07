@@ -89,12 +89,12 @@ graph TD
     NodeFormat --> End([END])
 
     %% Styling
-    style Start fill:#f9f,stroke:#333,stroke-width:2px
-    style End fill:#9f9,stroke:#333,stroke-width:2px
-    style Decision fill:#ff9,stroke:#333,stroke-width:2px
-    style NodeCritic fill:#d5f,stroke:#333,stroke-width:1px
-    style NodeWriter fill:#bdf,stroke:#333,stroke-width:1px
-    style NodeResearch fill:#bdf,stroke:#333,stroke-width:1px
+    style Start fill:#f9f,stroke:#333,stroke-width:2px,color:#000
+    style End fill:#9f9,stroke:#333,stroke-width:2px,color:#000
+    style Decision fill:#ff9,stroke:#333,stroke-width:2px,color:#000
+    style NodeCritic fill:#d5f,stroke:#333,stroke-width:1px,color:#000
+    style NodeWriter fill:#bdf,stroke:#333,stroke-width:1px,color:#000
+    style NodeResearch fill:#bdf,stroke:#333,stroke-width:1px,color:#000
 ```
 
 ### Routing Logic
