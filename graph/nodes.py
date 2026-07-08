@@ -3,21 +3,10 @@ from agents.critic_agent import critic_agent
 from agents.research_agent import research_agent
 from agents.writer_agent import writer_agent
 from graph.state import poemState
-from services.topic_service import get_next_topic
+from app.config import TELEGRAM_CHANNEL_ID
 
 
 logger = get_logger(__name__)
-
-
-def topic_planner_node(state: poemState) -> poemState:
-    logger.info("--- [NODE] Topic Planner ---")
-    try:
-        topic = get_next_topic()
-        logger.info(f"Selected Topic: '{topic}'")
-        return {"topic": topic}
-    except Exception as e:
-        logger.error(f"Error occurred in Topic Planner: {e}", exc_info=True)
-        raise
 
 
 def research_node(state: poemState) -> poemState:
@@ -74,7 +63,3 @@ def formatted_output_node(state: poemState) -> poemState:
     )
 
     return {"formatted_content": formatted}
-
-
-def publisher_node(state: poemState) -> poemState:
-    pass

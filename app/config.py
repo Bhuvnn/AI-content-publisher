@@ -6,15 +6,14 @@ BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHANNEL_ID = os.getenv("TELEGRAM_CHANNEL_ID")
 TELEGRAM_ADMIN_CHAT_ID = os.getenv("TELEGRAM_ADMIN_CHAT_ID")
 API_KEY = os.getenv("GROQ_API_KEY")
-YAML_PATH="topics.yaml"
 COOLDOWN_DAYS = 7
 MAX_ITERATIONS = 3
 
 BASE_URL = "https://api.groq.com/openai/v1"
 WRITER_MODEL = "llama-3.3-70b-versatile"
 CRITIC_MODEL = "llama-3.1-8b-instant"
-RESEARCH_MODEL = "llama-3.1-8b-instant"
-
+RESEARCH_MODEL = "llama-3.1-70b-versatile"
+TOPIC_GENERATOR_MODEL = "llama-3.1-8b-instant"
 
 TELEGRAM_WELCOME_MESSAGE ="""
 🤖 <b>Welcome, {user}!</b>
