@@ -6,12 +6,12 @@ from app.logger import get_logger
 logger = get_logger(__name__)
 
 
-async def publish_to_channel(bot: Bot, formatted_content: str):
+async def publish_to_channel(application, formatted_content: str):
     if not TELEGRAM_CHANNEL_ID:
         raise ValueError("TELEGRAM_CHANNEL_ID is not configured.")
 
     logger.info("Publishing formatted content to Telegram channel %s", TELEGRAM_CHANNEL_ID)
-    return await bot.send_message(
+    return await application.bot.send_message(
         chat_id=TELEGRAM_CHANNEL_ID,
         text=formatted_content,
         parse_mode="HTML",

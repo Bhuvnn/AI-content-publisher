@@ -20,6 +20,7 @@ async def run_workflow_for_topic(topic: str, iteration: int = 0):
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
+    print(update.effective_chat.id)
 
     await update.message.reply_html(
         TELEGRAM_WELCOME_MESSAGE.format(user=user.mention_html())
