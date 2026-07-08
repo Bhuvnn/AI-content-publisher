@@ -96,8 +96,5 @@ Avoid repeating similar concepts, metaphors, or settings.
 Generate:
 
 • A short title or prompt (maximum 15 words)
-
-{format_instructions}
-
 Return only the structured output.
 """

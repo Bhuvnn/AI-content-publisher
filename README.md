@@ -27,7 +27,8 @@ This loop repeats dynamically until the poem achieves a satisfactory score (8.0+
   * **Publish**: Instantly posts the finalized content to your public/private Telegram channel.
   * **Regenerate**: Discards the current output and runs a fresh generation cycle.
   * **Cancel**: Discards the current draft.
-* **Cooldown-Aware Topic Rotation**: Selects default topics from `topics.yaml` using a random rotation system that tracks cooldown periods to keep published content fresh.
+* **Dynamic Topic Generation**: Generates original, creative poem prompts using a specialized LLM agent, replacing static topic pools.
+* **Automated Publishing Scheduler**: Periodically runs the generation workflow and publishes a poem daily at 21:00 (Asia/Kolkata timezone) using APScheduler.
 * **Structured Output Validation**: Enforces JSON outputs using LangChain and Pydantic models for absolute data schema compliance.
 
 ---
@@ -40,10 +41,12 @@ The project is structured modularly:
 ├── agents/             # Prompts & chains for specialized agents
 │   ├── critic_agent.py
 │   ├── research_agent.py
+│   ├── topic_generator_agent.py
 │   └── writer_agent.py
 ├── app/                # Configuration and global logger setup
 │   ├── config.py
-│   └── logger.py
+│   ├── logger.py
+│   └── scheduler.py    # Daily automated workflow scheduling
 ├── graph/              # LangGraph workflow definition & state structure
 │   ├── nodes.py        # Logic wrapper for state transitions
 │   ├── state.py        # Pydantic schemas and TypedDict state definition
@@ -51,9 +54,8 @@ The project is structured modularly:
 ├── prompts/            # Raw templates for agents
 │   ├── critic.py
 │   ├── research.py
+│   ├── topic_generator.py
 │   └── writer.py
-├── services/           # Helper business logic (e.g., topic selection)
-│   └── topic_service.py
 ├── telegram_bot/       # Telegram interfaces, handlers, and callbacks
 │   ├── callbacks.py    # Inline button responses (Publish, Regenerate, Cancel)
 │   ├── constants.py    # Key values
@@ -62,7 +64,6 @@ The project is structured modularly:
 │   └── publisher.py    # Channel publication wrapper
 ├── tools/              # LLM wrapper configuration
 │   └── llm.py
-├── topics.yaml         # Configured topic rotation pool
 ├── main.py             # Main entry point (starts the Telegram polling loop)
 └── requirements.txt    # Dependency manifest
 ```
@@ -112,7 +113,7 @@ graph TD
 * **Core Pipeline**: ![LangGraph](https://img.shields.io/badge/LangGraph-0.1+-blue?style=flat-square) ![LangChain](https://img.shields.io/badge/LangChain-0.2+-orange?style=flat-square) ![Pydantic](https://img.shields.io/badge/Pydantic-v2-red?style=flat-square)
 * **LLM Engine**: ![Groq Cloud](https://img.shields.io/badge/Groq-API-green?style=flat-square) (Models: `llama-3.3-70b-versatile` & `llama-3.1-8b-instant`)
 * **Bot Service**: ![python-telegram-bot](https://img.shields.io/badge/python--telegram--bot-v20+-blue?style=flat-square)
-* **Storage & Serialization**: ![PyYAML](https://img.shields.io/badge/PyYAML-v6-lightgrey?style=flat-square)
+* **Scheduling**: APScheduler (Advanced Python Scheduler)
 
 ---
 

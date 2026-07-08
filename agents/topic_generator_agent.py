@@ -8,10 +8,8 @@ model=load_llm(model_name=TOPIC_GENERATOR_MODEL)
 parser=StrOutputParser()
 
 prompt=PromptTemplate(template=TOPIC_GENERATOR_PROMPT,
-                      input_variables=[],
-                      partial_variables={
-                        "format_instructions": parser.get_format_instructions()
-                })
+                      input_variables=[]
+                      )
 
 chain=prompt | model | parser
 

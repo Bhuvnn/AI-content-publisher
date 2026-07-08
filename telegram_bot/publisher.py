@@ -1,7 +1,6 @@
-from telegram import Bot
-
 from app.config import TELEGRAM_CHANNEL_ID
 from app.logger import get_logger
+from telegram import Bot
 
 logger = get_logger(__name__)
 
