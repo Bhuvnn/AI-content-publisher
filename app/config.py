@@ -14,6 +14,9 @@ CRITIC_MODEL = "llama-3.1-8b-instant"
 RESEARCH_MODEL = "llama-3.3-70b-versatile"
 TOPIC_GENERATOR_MODEL = "llama-3.1-8b-instant"
 
+DB_URL = os.getenv("DATABASE_URL")
+
+
 TELEGRAM_WELCOME_MESSAGE ="""
 🤖 <b>Welcome, {user}!</b>
 
@@ -33,6 +36,9 @@ I'll:
 
 <i>Simply send your first idea to begin.</i>
 """
+
+
+
 
 
 TELEGRAM_HELP_MESSAGE = """🤖 <b>AI Content Publisher</b>

@@ -7,7 +7,7 @@ from telegram.ext import ContextTypes
 from app.config import TELEGRAM_HELP_MESSAGE, TELEGRAM_WELCOME_MESSAGE
 from app.logger import get_logger
 from graph.workflow import workflow
-from telegram_bot.constants import USER_DATA_FORMATTED_CONTENT, USER_DATA_WORKFLOW_INPUT
+from telegram_bot.constants import WORKFLOW_CONTENT, USER_DATA_WORKFLOW_INPUT
 from telegram_bot.keyboards import preview_keyboard
 
 logger = get_logger(__name__)
@@ -50,7 +50,6 @@ async def generate_content(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
     try:
         result = await run_workflow_for_topic(topic, iteration=0)
-        formatted_content = result["formatted_content"]
 
     except RateLimitError:
         await status_message.delete()
@@ -74,11 +73,11 @@ async def generate_content(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         "topic": topic,
         "iteration": 0,
     }
-    context.user_data[USER_DATA_FORMATTED_CONTENT] = formatted_content
+    context.user_data[WORKFLOW_CONTENT] = result
 
     await status_message.delete()
 
     await message.reply_html(
-        formatted_content,
+        result["formatted_content"],
         reply_markup=preview_keyboard,
     )

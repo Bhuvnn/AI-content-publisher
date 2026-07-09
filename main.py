@@ -1,6 +1,7 @@
 from telegram import Update
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler
 from app.scheduler import start_scheduler
+from database.init_db import init_db
 from telegram_bot.callbacks import handle_callback
 from app.config import BOT_TOKEN, TELEGRAM_WELCOME_MESSAGE
 from telegram_bot.handlers import generate_content, help_command, start
@@ -11,6 +12,7 @@ async def post_init(application: Application):
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
+    init_db()
     application = Application.builder().token(BOT_TOKEN).post_init(post_init).build()
 
 

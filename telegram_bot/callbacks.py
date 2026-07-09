@@ -8,10 +8,12 @@ from telegram_bot.constants import (
     CALLBACK_REGENERATE,
     USER_DATA_FORMATTED_CONTENT,
     USER_DATA_WORKFLOW_INPUT,
+    WORKFLOW_CONTENT,
 )
 from telegram_bot.handlers import run_workflow_for_topic
 from telegram_bot.keyboards import build_preview_keyboard
 from telegram_bot.publisher import publish_to_channel
+from database.crud import save_poem
 
 logger = get_logger(__name__)
 
@@ -29,20 +31,21 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         return
 
     if action == CALLBACK_PUBLISH:
-        formatted_content = context.user_data.get(USER_DATA_FORMATTED_CONTENT)
-        if not formatted_content:
+        workflow = context.user_data.get(WORKFLOW_CONTENT)
+        if not workflow or "formatted_content" not in workflow:
             await message.edit_text("This preview is no longer available.", reply_markup=None)
             return
 
         try:
-            await publish_to_channel(context.bot, formatted_content)
+            sent_message = await publish_to_channel(context.bot, workflow["formatted_content"])
+            save_poem(workflow, sent_message.message_id)
         except Exception as exc:
             logger.exception("Failed to publish formatted content")
             await message.edit_text(f"Publishing failed: {exc}", reply_markup=None)
             return
 
         await message.edit_text(
-            f"✅ Published to the Telegram channel.\n\n{formatted_content}",
+            f"✅ Published to the Telegram channel.\n\n{workflow['formatted_content']}",
             parse_mode="HTML",
             reply_markup=None,
         )
@@ -65,7 +68,7 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             await message.edit_text(f"Regeneration failed: {exc}", reply_markup=None)
             return
 
-        context.user_data[USER_DATA_FORMATTED_CONTENT] = formatted_content
+        context.user_data[WORKFLOW_CONTENT] = result
         context.user_data[USER_DATA_WORKFLOW_INPUT] = {
             "topic": workflow_input["topic"],
             "iteration": workflow_input.get("iteration", 0),

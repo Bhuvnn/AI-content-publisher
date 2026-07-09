@@ -91,6 +91,9 @@ Always generate a topic that feels substantially different from recent ones.
 
 Avoid repeating similar concepts, metaphors, or settings.
 
+Here are the 10 most recent topics generated. Do NOT copy, reuse, or generate anything similar to these. Choose a unique one:
+{recent_topics}
+
 ## Output
 
 Generate:
