@@ -1,6 +1,3 @@
-from langgraph.checkpoint.sqlite import SqliteSaver
-from graph.thread import thread_id
+from langgraph.checkpoint.memory import InMemorySaver
 
-checkpointer = SqliteSaver.from_conn_string(
-    "checkpoints.db"
-)
+checkpointer = InMemorySaver()
