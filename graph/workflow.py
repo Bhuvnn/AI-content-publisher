@@ -3,6 +3,7 @@ from graph.state import poemState
 from graph.nodes import research_node, content_generator_node, critic_node, formatted_output_node
 from app.config import MAX_ITERATIONS
 from app.logger import get_logger
+from graph.checkpoint import checkpointer
 
 logger = get_logger(__name__)
 
@@ -40,4 +41,4 @@ graph.add_conditional_edges("critic", should_rewrite, {True: "content_generator"
 graph.add_edge("formatted_output", END)
 
 
-workflow = graph.compile()
+workflow = graph.compile(checkpointer=checkpointer)

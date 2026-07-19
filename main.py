@@ -3,7 +3,7 @@ from telegram.ext import Application, CallbackQueryHandler, CommandHandler
 from app.scheduler import start_scheduler
 from database.init_db import init_db
 from telegram_bot.callbacks import handle_callback
-from app.config import BOT_TOKEN, TELEGRAM_WELCOME_MESSAGE
+from app.config import BOT_TOKEN
 from telegram_bot.handlers import generate_content, help_command, start
 
 async def post_init(application: Application):

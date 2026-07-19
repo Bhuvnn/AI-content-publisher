@@ -9,13 +9,19 @@ from app.logger import get_logger
 from graph.workflow import workflow
 from telegram_bot.constants import WORKFLOW_CONTENT, USER_DATA_WORKFLOW_INPUT
 from telegram_bot.keyboards import preview_keyboard
+from graph.thread import get_thread_id
 
 logger = get_logger(__name__)
 
 
 async def run_workflow_for_topic(topic: str, iteration: int = 0):
+    checkpoint_config = {
+    "configurable": {
+        "thread_id": get_thread_id()
+    }
+    }
     workflow_input = {"topic": topic, "iteration": iteration}
-    return await asyncio.to_thread(workflow.invoke, workflow_input)
+    return await asyncio.to_thread(workflow.invoke, workflow_input, config=checkpoint_config)
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
